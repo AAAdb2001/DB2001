@@ -1,0 +1,44 @@
+from tensorflow import keras
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+(x_train,y_train),(x_test,y_test)=keras.datasets.mnist.load_data()
+
+plt.imshow(x_train[0],cmap='gray')
+
+x_train=x_train/255.0
+
+x_test=x_test/255.0
+
+x_train.shape
+
+x_train=x_train.reshape(60000,784)
+x_test=x_test.reshape(10000,784)
+
+x_train.shape
+
+num_classes=10
+y_train=np.eye(num_classes)[y_train]
+y_test=np.eye(num_classes)[y_test]
+
+model=keras.Sequential([
+    keras.layers.Dense(512,activation='relu',input_shape=(784,)),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(512,activation='relu'),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(num_classes,activation='softmax')
+
+])
+
+from tensorflow.keras.optimizers import RMSprop
+model.compile(loss="categorical_crossentropy",optimizer=RMSprop(),metrics=['accuracy'])
+
+history=model.fit(x_train,y_train,epochs=2,validation_data=(x_test,y_test),batch_size=128)
+
+
+score=model.evaluate(x_test,y_test)
+print("Loss: ",score[0])
+print("Accuracy: ",score[1])
+

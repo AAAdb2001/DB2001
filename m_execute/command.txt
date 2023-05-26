@@ -1,0 +1,6 @@
+openmp
+to compile file - gcc -fopenmp filename -lstdc++
+to run file - ./a.out
+
+python
+python3 filename
